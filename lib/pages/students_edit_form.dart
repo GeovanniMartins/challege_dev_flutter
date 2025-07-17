@@ -30,7 +30,7 @@ class _StudentEditFormState extends State<StudentEditForm> {
     super.initState();
     _cpfFormatter = MaskTextInputFormatter(mask: '###.###.###-##');
     _nameController = TextEditingController(text: widget.student.name);
-    _emailController = TextEditingController(text: widget.student.email ?? '');
+    _emailController = TextEditingController(text: widget.student.email);
     _cpfController = TextEditingController(
       text: _cpfFormatter.maskText(widget.student.cpf),
     );
@@ -202,6 +202,12 @@ class _StudentEditFormState extends State<StudentEditForm> {
                   ),
                   keyboardType: TextInputType.number,
                   inputFormatters: [_cpfFormatter],
+                  onChanged: (val) {
+                    _cpfFormatter.formatEditUpdate(
+                      TextEditingValue.empty,
+                      TextEditingValue(text: val),
+                    );
+                  },
                   validator: (v) =>
                       v == null || v.trim().isEmpty ? 'Obrigatório' : null,
                 ),
@@ -213,6 +219,7 @@ class _StudentEditFormState extends State<StudentEditForm> {
                     border: OutlineInputBorder(),
                   ),
                   keyboardType: TextInputType.number,
+                  readOnly: true,
                   validator: (v) =>
                       v == null || v.trim().isEmpty ? 'Obrigatório' : null,
                 ),
@@ -225,10 +232,9 @@ class _StudentEditFormState extends State<StudentEditForm> {
                   ),
                   keyboardType: TextInputType.emailAddress,
                   validator: (v) {
-                    if (v != null && v.isNotEmpty) {
-                      final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
-                      if (!emailRegex.hasMatch(v)) return 'Email inválido';
-                    }
+                    if (v == null || v.trim().isEmpty) return 'Obrigatório';
+                    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+                    if (!emailRegex.hasMatch(v)) return 'Email inválido';
                     return null;
                   },
                 ),
