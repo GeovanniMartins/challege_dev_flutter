@@ -4,6 +4,7 @@ import 'package:challege_dev_flutter/pages/students_edit_form.dart';
 import 'package:challege_dev_flutter/services/student_service.dart';
 import 'package:challege_dev_flutter/widgets/students_list.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -12,9 +13,55 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  int _selectedIndex = 0;
   List<Student> _students = [];
   String _filter = '';
   bool _loading = true;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  void _onNavTap(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+    if (index == 1) {
+      showModalBottomSheet(
+        context: context,
+        builder: (_) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: Icon(Icons.link),
+                title: Text('Chamados'),
+                onTap: () async {
+                  const url = 'https://cesla.ind.br';
+                  if (await canLaunchUrl(Uri.parse(url))) {
+                    await launchUrl(Uri.parse(url));
+                  }
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.phone),
+                title: Text('SAC: 0800 123 456'),
+                onTap: () async {
+                  const phone = 'tel:0800123456';
+                  if (await canLaunchUrl(Uri.parse(phone))) {
+                    await launchUrl(phone as Uri);
+                  }
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    } else if (index == 2) {
+      _scaffoldKey.currentState?.openEndDrawer();
+    } else if (index == 0) {
+      _scaffoldKey.currentState?.openDrawer();
+    }
+  }
 
   void _onDelete(Student student) async {
     final confirmed = await showDialog<bool>(
@@ -109,6 +156,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(
           leading: IconButton(
             icon: Icon(Icons.arrow_back, color: Colors.white),
@@ -123,6 +171,34 @@ class _HomePageState extends State<HomePage> {
               fontWeight: FontWeight.w600,
               color: Colors.white,
             ),
+          ),
+        ),
+        drawer: Drawer(
+          child: ListView(
+            children: [
+              DrawerHeader(child: Text('Menu')),
+              ListTile(
+                title: Text('Teste 1'),
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                title: Text('teste 2'),
+                onTap: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        ),
+        endDrawer: Drawer(
+          child: ListView(
+            children: [
+              DrawerHeader(child: Text("Notificações")),
+              ListTile(title: Text("Notificação 1")),
+              ListTile(title: Text("Notificação 2")),
+            ],
           ),
         ),
         body: Center(
@@ -172,6 +248,29 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: _selectedIndex,
+          type: BottomNavigationBarType.fixed,
+          onTap: (index) {
+            _onNavTap(index);
+          },
+          selectedItemColor: const Color.fromARGB(255, 9, 96, 167),
+          items: [
+            BottomNavigationBarItem(icon: Icon(Icons.menu), label: 'Menu'),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.help_outline),
+              label: 'Ajuda',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.notifications_none),
+              label: 'Notificações',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person_outline),
+              label: 'Perfil',
+            ),
+          ],
         ),
       ),
     );
