@@ -107,7 +107,7 @@ class _StudentFormState extends State<StudentForm> {
               Navigator.of(context).pop();
             },
           ),
-          backgroundColor: const Color.fromARGB(255, 9, 96, 167),
+          backgroundColor: const Color(0xFF0960A7),
           title: Text(
             'Novo Aluno',
             textAlign: TextAlign.start,
@@ -123,6 +123,7 @@ class _StudentFormState extends State<StudentForm> {
           child: Form(
             key: _formKey,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 TextFormField(
                   controller: _nameController,
@@ -130,8 +131,9 @@ class _StudentFormState extends State<StudentForm> {
                     labelText: 'Nome do Aluno *',
                     border: OutlineInputBorder(),
                   ),
-                  validator: (v) =>
-                      v == null || v.trim().isEmpty ? 'Obrigatório' : null,
+                  validator: (v) => v == null || v.trim().isEmpty
+                      ? 'Campo obrigatório'
+                      : null,
                 ),
                 SizedBox(height: 16),
                 TextFormField(
@@ -164,8 +166,9 @@ class _StudentFormState extends State<StudentForm> {
                   ),
                   keyboardType: TextInputType.number,
                   inputFormatters: [_cpfFormatter],
-                  validator: (v) =>
-                      v == null || v.trim().isEmpty ? 'Obrigatório' : null,
+                  validator: (v) => v == null || v.trim().isEmpty
+                      ? 'Campo obrigatório'
+                      : null,
                 ),
                 SizedBox(height: 16),
                 TextFormField(
@@ -175,10 +178,16 @@ class _StudentFormState extends State<StudentForm> {
                     border: OutlineInputBorder(),
                   ),
                   keyboardType: TextInputType.number,
-                  validator: (v) =>
-                      v == null || v.trim().isEmpty ? 'Obrigatório' : null,
+                  validator: (v) => v == null || v.trim().isEmpty
+                      ? 'Campo obrigatório'
+                      : null,
                 ),
                 SizedBox(height: 16),
+                Text(
+                  'Dados de acesso',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 8),
                 TextFormField(
                   controller: _emailController,
                   decoration: InputDecoration(
@@ -187,10 +196,11 @@ class _StudentFormState extends State<StudentForm> {
                   ),
                   keyboardType: TextInputType.emailAddress,
                   validator: (v) {
-                    if (v != null && v.isNotEmpty) {
-                      final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
-                      if (!emailRegex.hasMatch(v)) return 'Email inválido';
+                    if (v == null || v.trim().isEmpty) {
+                      return 'Campo obrigatório';
                     }
+                    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+                    if (!emailRegex.hasMatch(v)) return 'Email inválido';
                     return null;
                   },
                 ),
@@ -201,12 +211,7 @@ class _StudentFormState extends State<StudentForm> {
                         width: double.infinity,
                         child: FilledButton(
                           style: FilledButton.styleFrom(
-                            backgroundColor: const Color.fromARGB(
-                              255,
-                              9,
-                              96,
-                              167,
-                            ),
+                            backgroundColor: const Color(0xFF0960A7),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(4),
                             ),

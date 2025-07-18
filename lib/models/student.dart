@@ -25,4 +25,14 @@ class Student {
       cpf: json['cpf'],
     );
   }
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'email': email,
+      'birthdate': birthdate,
+      'academic_record': academicRecord,
+      'cpf': cpf,
+    };
+  }
 }

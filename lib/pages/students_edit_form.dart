@@ -52,8 +52,6 @@ class _StudentEditFormState extends State<StudentEditForm> {
     }
   }
 
-  String get cpf => _cpfFormatter.getUnmaskedText();
-
   @override
   void dispose() {
     _nameController.dispose();
@@ -74,8 +72,6 @@ class _StudentEditFormState extends State<StudentEditForm> {
         id: widget.student.id,
         name: _nameController.text.trim(),
         birthdate: _birthDateController.text.trim(),
-        cpf: _cpfFormatter.getUnmaskedText(),
-        academicRecord: _academicRecordController.text.trim(),
         email: _emailController.text.trim(),
       );
       setState(() => _isLoading = false);
@@ -145,7 +141,7 @@ class _StudentEditFormState extends State<StudentEditForm> {
               Navigator.of(context).pop();
             },
           ),
-          backgroundColor: const Color.fromARGB(255, 9, 96, 167),
+          backgroundColor: const Color(0xFF0960A7),
           title: Text(
             'Editar Aluno',
             textAlign: TextAlign.start,
@@ -161,6 +157,7 @@ class _StudentEditFormState extends State<StudentEditForm> {
           child: Form(
             key: _formKey,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 TextFormField(
                   controller: _nameController,
@@ -168,8 +165,9 @@ class _StudentEditFormState extends State<StudentEditForm> {
                     labelText: 'Nome do Aluno *',
                     border: OutlineInputBorder(),
                   ),
-                  validator: (v) =>
-                      v == null || v.trim().isEmpty ? 'Obrigatório' : null,
+                  validator: (v) => v == null || v.trim().isEmpty
+                      ? 'Campo obrigatório'
+                      : null,
                 ),
                 SizedBox(height: 16),
                 TextFormField(
@@ -195,21 +193,12 @@ class _StudentEditFormState extends State<StudentEditForm> {
                 ),
                 SizedBox(height: 16),
                 TextFormField(
+                  readOnly: true,
                   controller: _cpfController,
                   decoration: InputDecoration(
                     labelText: 'CPF *',
                     border: OutlineInputBorder(),
                   ),
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [_cpfFormatter],
-                  onChanged: (val) {
-                    _cpfFormatter.formatEditUpdate(
-                      TextEditingValue.empty,
-                      TextEditingValue(text: val),
-                    );
-                  },
-                  validator: (v) =>
-                      v == null || v.trim().isEmpty ? 'Obrigatório' : null,
                 ),
                 SizedBox(height: 16),
                 TextFormField(
@@ -218,12 +207,13 @@ class _StudentEditFormState extends State<StudentEditForm> {
                     labelText: 'Registro Acadêmico(RA)*',
                     border: OutlineInputBorder(),
                   ),
-                  keyboardType: TextInputType.number,
-                  readOnly: true,
-                  validator: (v) =>
-                      v == null || v.trim().isEmpty ? 'Obrigatório' : null,
                 ),
                 SizedBox(height: 16),
+                Text(
+                  'Dados de acesso',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 8),
                 TextFormField(
                   controller: _emailController,
                   decoration: InputDecoration(
@@ -232,7 +222,9 @@ class _StudentEditFormState extends State<StudentEditForm> {
                   ),
                   keyboardType: TextInputType.emailAddress,
                   validator: (v) {
-                    if (v == null || v.trim().isEmpty) return 'Obrigatório';
+                    if (v == null || v.trim().isEmpty) {
+                      return 'Campo obrigatório';
+                    }
                     final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
                     if (!emailRegex.hasMatch(v)) return 'Email inválido';
                     return null;
@@ -245,12 +237,7 @@ class _StudentEditFormState extends State<StudentEditForm> {
                         width: double.infinity,
                         child: FilledButton(
                           style: FilledButton.styleFrom(
-                            backgroundColor: const Color.fromARGB(
-                              255,
-                              9,
-                              96,
-                              167,
-                            ),
+                            backgroundColor: const Color(0xFF0960A7),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(4),
                             ),

@@ -2,9 +2,9 @@ import 'package:challege_dev_flutter/models/student.dart';
 import 'package:challege_dev_flutter/pages/student_form.dart';
 import 'package:challege_dev_flutter/pages/students_edit_form.dart';
 import 'package:challege_dev_flutter/services/student_service.dart';
+import 'package:challege_dev_flutter/widgets/menu_nav_widgets.dart';
 import 'package:challege_dev_flutter/widgets/students_list.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -17,7 +17,6 @@ class _HomePageState extends State<HomePage> {
   List<Student> _students = [];
   String _filter = '';
   bool _loading = true;
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   void _onNavTap(int index) {
     setState(() {
@@ -27,39 +26,23 @@ class _HomePageState extends State<HomePage> {
       showModalBottomSheet(
         context: context,
         builder: (_) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                leading: Icon(Icons.link),
-                title: Text('Chamados'),
-                onTap: () async {
-                  const url = 'https://cesla.ind.br';
-                  if (await canLaunchUrl(Uri.parse(url))) {
-                    await launchUrl(Uri.parse(url));
-                  }
-                  Navigator.of(context).pop();
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.phone),
-                title: Text('SAC: 0800 123 456'),
-                onTap: () async {
-                  const phone = 'tel:0800123456';
-                  if (await canLaunchUrl(Uri.parse(phone))) {
-                    await launchUrl(phone as Uri);
-                  }
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
+          return MenuNavWidgetHelp();
         },
       );
     } else if (index == 2) {
-      _scaffoldKey.currentState?.openEndDrawer();
+      showModalBottomSheet(
+        context: context,
+        builder: (_) {
+          return MenuNavWidgetNotification();
+        },
+      );
     } else if (index == 0) {
-      _scaffoldKey.currentState?.openDrawer();
+      showModalBottomSheet(
+        context: context,
+        builder: (_) {
+          return MenuNavWidgetMenu();
+        },
+      );
     }
   }
 
@@ -91,7 +74,7 @@ class _HomePageState extends State<HomePage> {
         await showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: Text('Sucesso'),
+            title: Text('Sucesso!'),
             content: Text('Aluno excluído com sucesso!'),
             actions: [
               TextButton(
@@ -106,8 +89,8 @@ class _HomePageState extends State<HomePage> {
         await showDialog(
           context: context,
           builder: (context) => AlertDialog(
-            title: Text('Erro'),
-            content: Text('Erro ao excluir aluno'),
+            title: Text('Atenção!'),
+            content: Text('Erro ao excluir aluno!'),
             actions: [
               TextButton(
                 child: Text('OK'),
@@ -156,13 +139,12 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        key: _scaffoldKey,
         appBar: AppBar(
           leading: IconButton(
             icon: Icon(Icons.arrow_back, color: Colors.white),
             onPressed: () {},
           ),
-          backgroundColor: const Color.fromARGB(255, 9, 96, 167),
+          backgroundColor: const Color(0xFF0960A7),
           title: Text(
             'Alunos',
             textAlign: TextAlign.start,
@@ -171,34 +153,6 @@ class _HomePageState extends State<HomePage> {
               fontWeight: FontWeight.w600,
               color: Colors.white,
             ),
-          ),
-        ),
-        drawer: Drawer(
-          child: ListView(
-            children: [
-              DrawerHeader(child: Text('Menu')),
-              ListTile(
-                title: Text('Teste 1'),
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              ListTile(
-                title: Text('teste 2'),
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          ),
-        ),
-        endDrawer: Drawer(
-          child: ListView(
-            children: [
-              DrawerHeader(child: Text("Notificações")),
-              ListTile(title: Text("Notificação 1")),
-              ListTile(title: Text("Notificação 2")),
-            ],
           ),
         ),
         body: Center(
@@ -227,10 +181,10 @@ class _HomePageState extends State<HomePage> {
                 ),
 
                 FloatingActionButton.extended(
-                  extendedPadding: EdgeInsets.all(16),
-                  backgroundColor: const Color.fromARGB(255, 9, 96, 167),
+                  extendedPadding: EdgeInsets.all(6),
+                  backgroundColor: const Color(0xFF0960A7),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(4),
                   ),
                   onPressed: () {
                     Navigator.of(context).push(
@@ -255,7 +209,7 @@ class _HomePageState extends State<HomePage> {
           onTap: (index) {
             _onNavTap(index);
           },
-          selectedItemColor: const Color.fromARGB(255, 9, 96, 167),
+          selectedItemColor: const Color(0xFF0960A7),
           items: [
             BottomNavigationBarItem(icon: Icon(Icons.menu), label: 'Menu'),
             BottomNavigationBarItem(

@@ -1,16 +1,14 @@
 # challege_dev_flutter
 
-A new Flutter project.
+Aplicativo Flutter para gerenciamento de alunos com cadastro, edição, exclusão e visualização.
 
-## Getting Started
+Funcionalidades
+  Listagem de alunos
+  Cadastro de novos alunos
+  Edição de dados
+  Exclusão
+  Busca por nome/cpf
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Tecnologias
+  Flutter 3.x
+  Dart
